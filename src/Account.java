@@ -11,13 +11,13 @@ public class Account {
 	private int blockindex = 0;
 	
 	public Account(String fullName, float balance, String password) {
-		this.fullName = fullName;
+		this.fullName = fullName.trim();
 		if (balance < 0) {
 			this.balance = 0;
 		}else {
 			this.balance =  balance;
 		}
-		this.password = password;
+		this.password = password.trim();
 		this.id = nextID;
 		nextID++;
 	}
