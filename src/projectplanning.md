@@ -12,7 +12,7 @@ roadmap as of august 18
 8. add a transaction fee between 1-3%.
 9. add either JSON file or SQL database later on with password encryption
 10. add GUI using javaFX 
-
+11 add a transaction ledger 
 - - - - - - - -- - - -  -- - - - - - - - -
 instruction on saving changes to github 
 

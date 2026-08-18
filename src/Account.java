@@ -4,7 +4,7 @@ public class Account {
 	private static final Random random = new Random();
 	private static int nextID = random.nextInt(800000000) + 100000000;
 	private String fullName;
-	private float balance;
+	private double balance;
 	private String password;
 	private final int id;
 	private int[] blocklist = new int[20];
@@ -90,7 +90,7 @@ public class Account {
 	public int getID() {
 		return id;
 	}
-	public float getBalance() {
+	public double getBalance() {
 		return balance;
 	}
 	
@@ -99,13 +99,13 @@ public class Account {
 	}
 	
 
-	void addBalance(float amount) {
+	void addBalance(double amount) {
 	    if (amount > 0) {
 	        this.balance += amount;
 	    }
 	}
 
-	void deductBalance(float amount) {
+	void deductBalance(double amount) {
 	    if (amount > 0 && amount <= balance) {
 	        this.balance -= amount;
 	    }
