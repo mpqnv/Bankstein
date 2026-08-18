@@ -13,3 +13,21 @@ roadmap as of august 18
 9. add either JSON file or SQL database later on with password encryption
 10. add GUI using javaFX 
 
+- - - - - - - -- - - -  -- - - - - - - - -
+instruction on saving changes to github 
+
+1. open terminal
+2. cd(space) github repo link
+3. git add .
+4. git commit -m "message"
+5. git push origin and then branch name
+
+- - - - -- - - - - - - --  - - - -- - 
+
+to create a new branch: git switch -c branchname
+
+to confirm what branch: git branch
+
+The first time you push a new branch you must tell GitHub its name: git push -u origin branchname
+
+switch to main : git switch main
