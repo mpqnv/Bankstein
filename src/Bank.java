@@ -9,13 +9,17 @@ public class Bank {
 	}
 	
 	public void addAccount(Account account) {
-		if(accounts.contains(account) || account == null) {
-			return;
-		}
-		else {
-			accounts.add(account);
-		}
+	    if (account == null) return;
+	    for (int i = 0; i < accounts.size(); i++) {
+	        if (accounts.get(i).getID() == account.getID()) {
+	            System.out.println("Account with ID " + account.getID() + " already exists.");
+	            return;
+	        }
+	    }
+	    accounts.add(account);
+	    System.out.println("Account created successfully.");
 	}
+	
 	public void deleteAccount(int id, String pass) {
 		for(int i = 0; i < accounts.size(); i++) {
 			if (accounts.get(i).getID() == id) {
@@ -34,6 +38,10 @@ public class Bank {
 	
 	
 	public void deposit(double money, int id, String pass) {
+		
+		if (money < 0) {
+			return;
+		}
 		for (int i = 0; i < accounts.size(); i++) {
 			if(accounts.get(i).getID() == id) {
 				if(pass!= null && accounts.get(i).checkpassword(pass)) {
@@ -51,62 +59,94 @@ public class Bank {
 	}
 	
 	public void withdraw(double money, int id, String pass) {
-		for (int i = 0; i < accounts.size(); i++) {
-			if(accounts.get(i).getID() == id) {
-				if(pass!= null && accounts.get(i).checkpassword(pass)) {
-					double feeAmount = money * (transactionFee / 100.0);
-					double totalDeduction = money + feeAmount;
-					accounts.get(i).deductBalance(totalDeduction);
-				}
-			}
-		}
-	}
-	public void transfer(int id, int recipient, double money, String pass) {
 		if (money <= 0) return;
 
-		int sender = -1;
-		int target = -1;
-		
 		for (int i = 0; i < accounts.size(); i++) {
 			if (accounts.get(i).getID() == id) {
-				sender = i;
+				if (pass != null && accounts.get(i).checkpassword(pass)) {
+					double feeAmount = money * (transactionFee / 100.0);
+					double total = money + feeAmount;
+					
+					if (accounts.get(i).getBalance() >= total) {
+						accounts.get(i).deductBalance(total);
+					} else {
+						System.out.println("Insufficient funds");
+					}
+					return;
+				}
+				System.out.println("Invalid password");
+				return;
 			}
-			if (accounts.get(i).getID() == recipient) {
-				target = i;
-			}
 		}
+		System.out.println("Invalid ID");
+	}
+	
+	
+	public void transfer(int id, int recipient, double money, String pass) {
+	    if (money <= 0) return;
 
-		if (sender == -1 || target == -1) {
-			System.out.println("Invalid sender or recipient ID");
-			return;
-		}
+	    int sender = -1;
+	    int target = -1;
+	    
+	    for (int i = 0; i < accounts.size(); i++) {
+	        if (accounts.get(i).getID() == id) {
+	            sender = i;
+	        }
+	        if (accounts.get(i).getID() == recipient) {
+	            target = i;
+	        }
+	        if (sender != -1 && target != -1) break;
+	    }
 
-		Account senderAcc = accounts.get(sender);
-		Account targetAcc = accounts.get(target);
+	    if (sender == -1 || target == -1) {
+	        System.out.println("Invalid sender or recipient ID");
+	        return;
+	    }
+	    
+	    if (sender == target) {
+	        System.out.println("You can not send money to yourself");
+	        return;
+	    }
 
-		if (pass == null || !senderAcc.checkpassword(pass)) {
-			System.out.println("Invalid password");
-			return;
-		}
+	    Account senderAcc = accounts.get(sender);
+	    Account targetAcc = accounts.get(target);
 
-		if (senderAcc.isBlocked(targetAcc.getID())) {
-			System.out.println("The recipient is in your block list");
-			return;
-		}
-		if (targetAcc.isBlocked(senderAcc.getID())) {
-			System.out.println("Failed to reach recipient");
-			return;
-		}
+	    if (pass == null || !senderAcc.checkpassword(pass)) {
+	        System.out.println("Invalid password");
+	        return;
+	    }
 
-		double feeAmount = money * (transactionFee / 100.0);
-		double totalDeduction = money + feeAmount;
+	    if (senderAcc.isBlocked(targetAcc.getID())) {
+	        System.out.println("The recipient is in your block list");
+	        return;
+	    }
+	    if (targetAcc.isBlocked(senderAcc.getID())) {
+	        System.out.println("Failed to reach recipient");
+	        return;
+	    }
 
-		if (senderAcc.getBalance() < totalDeduction) {
-			System.out.println("Insufficient funds for transfer and fee");
-			return;
-		}
+	    double feeAmount = money * (transactionFee / 100.0);
+	    double total = money + feeAmount;
 
-		senderAcc.deductBalance(totalDeduction);
-		targetAcc.addBalance(money);
+	    if (senderAcc.getBalance() < total) {
+	        System.out.println("Insufficient funds for transfer and fee");
+	        return;
+	    }
+
+	 
+	    if (!senderAcc.deductBalance(total)) {
+	        System.out.println("Transaction failed during deduction");
+	        return;
+	    }
+
+	  
+	    if (!targetAcc.addBalance(money)) {
+	      
+	        senderAcc.addBalance(total);
+	        System.out.println("Transaction failed during credit. Refunded sender.");
+	        return;
+	    }
+
+	    System.out.println("Successfully sent " + money + " USD to ID " + recipient);
 	}
 }

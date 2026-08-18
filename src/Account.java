@@ -10,14 +10,14 @@ public class Account {
 	private int[] blocklist = new int[20];
 	private int blockindex = 0;
 	
-	public Account(String fullName, float balance, String password) {
-		this.fullName = fullName.trim();
+	public Account(String fullName, double balance, String password) {
+		if(fullName != null) this.fullName = fullName.trim();
 		if (balance < 0) {
 			this.balance = 0;
 		}else {
 			this.balance =  balance;
 		}
-		this.password = password.trim();
+		if(password != null) this.password = password.trim();
 		this.id = nextID;
 		nextID++;
 	}
@@ -28,8 +28,8 @@ public class Account {
 	}
 	
 	public boolean setPassword(String oldpass, String newpass) {
-		if (checkpassword(oldpass)) {
-			this.password = newpass;
+		if (oldpass != null && newpass != null && checkpassword(oldpass.trim())) {
+			this.password = newpass.trim();
 			return true;
 		}
 		return false;
@@ -95,20 +95,27 @@ public class Account {
 	}
 	
 	public boolean checkpassword(String pass) {
-		return password != null && password.equals(pass);
+		if (pass == null) {
+			return false;
+		}
+		return password != null && password.equals(pass.trim());
 	}
 	
 
-	void addBalance(double amount) {
+	boolean addBalance(double amount) {
 	    if (amount > 0) {
 	        this.balance += amount;
+	        return true;
 	    }
+	    return false;
 	}
 
-	void deductBalance(double amount) {
+	boolean deductBalance(double amount) {
 	    if (amount > 0 && amount <= balance) {
 	        this.balance -= amount;
+	        return true;
 	    }
+	    return false;
 	}
 	
 	
