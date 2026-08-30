@@ -1,3 +1,4 @@
+package com.alper.bankstein;
 import java.util.Random;
 
 public class Account {

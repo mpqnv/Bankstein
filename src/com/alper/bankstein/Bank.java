@@ -1,3 +1,4 @@
+package com.alper.bankstein;
 import java.util.ArrayList;
 
 public class Bank {
