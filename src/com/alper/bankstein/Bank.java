@@ -148,6 +148,6 @@ public class Bank {
 	        return;
 	    }
 
-	    System.out.println("Successfully sent " + money + " USD to ID " + recipient);
+	    System.out.println(senderAcc.getName() + " successfully sent " + money + " USD to ID " + targetAcc.getName());
 	}
 }
