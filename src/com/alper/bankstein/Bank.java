@@ -40,7 +40,7 @@ public class Bank {
 	
 	public void deposit(double money, int id, String pass) {
 		
-		if (money < 0) {
+		if (money <= 0) {
 			return;
 		}
 		for (int i = 0; i < accounts.size(); i++) {
@@ -81,6 +81,7 @@ public class Bank {
 		}
 		System.out.println("Invalid ID");
 	}
+	
 	
 	
 	public void transfer(int id, int recipient, double money, String pass) {
